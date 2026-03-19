@@ -1,0 +1,12 @@
+{
+  "name": "Recibo de Unidades G&G",
+  "short_name": "RU G&G",
+  "start_url": "/gg-recibos/",
+  "display": "standalone",
+  "background_color": "#1a2840",
+  "theme_color": "#1a2840",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x135", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x360", "type": "image/png" }
+  ]
+}
