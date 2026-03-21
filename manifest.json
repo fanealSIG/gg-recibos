@@ -1,12 +1,15 @@
 {
   "name": "Recibo de Unidades G&G",
   "short_name": "RU G&G",
+  "description": "App de recibo de unidades en campo para Grupo G&G Constructores S.A.S.",
+  "id": "/gg-recibos/",
   "start_url": "/gg-recibos/",
   "display": "standalone",
   "background_color": "#1a2840",
   "theme_color": "#1a2840",
+  "orientation": "portrait",
   "icons": [
-    { "src": "icon_192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "icon_512.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "icon_192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon_512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }
