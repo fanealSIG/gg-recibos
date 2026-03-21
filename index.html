@@ -97,9 +97,90 @@ input[type=file]{display:none;}
 .empty{text-align:center;padding:36px 20px;color:#5a7a9a;}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a2840;color:#fff;padding:9px 18px;border-radius:20px;font-size:11px;font-family:'Courier New',monospace;letter-spacing:.5px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;}
+
+/* ── LOGIN SCREEN ── */
+.login-screen{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:#1a2840;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  z-index:9999;
+  padding:24px;
+}
+.login-logo-wrap{margin-bottom:28px;text-align:center;}
+.login-logo{height:56px;filter:brightness(0) invert(1);opacity:.9;}
+.login-title{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#7a8a9a;margin-top:8px;}
+.login-card{
+  background:#fff;border-radius:12px;
+  padding:28px 24px;width:100%;max-width:340px;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+}
+.login-card-title{
+  font-size:13px;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:#1a2840;
+  margin-bottom:18px;text-align:center;
+}
+.login-field{margin-bottom:14px;}
+.login-field label{
+  display:block;font-size:9px;letter-spacing:1.5px;
+  text-transform:uppercase;color:#7a8a9a;margin-bottom:4px;
+  font-family:'Courier New',monospace;
+}
+.login-field input{
+  width:100%;background:#f5f7fa;border:1.5px solid #c8d0da;
+  border-radius:7px;padding:11px 13px;font-size:14px;
+  color:#1a2840;font-family:'Courier New',monospace;outline:none;
+  transition:border-color .15s;
+}
+.login-field input:focus{border-color:#1a2840;background:#fff;}
+.login-btn{
+  width:100%;padding:13px;background:#1a2840;color:#fff;
+  border:none;border-radius:7px;font-size:11px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  font-family:'Courier New',monospace;cursor:pointer;
+  margin-top:4px;transition:background .15s;
+}
+.login-btn:hover{background:#243350;}
+.login-btn:active{background:#0d1520;}
+.login-error{
+  background:#fdf0f0;border:1px solid #f5c0c0;
+  border-radius:6px;padding:8px 12px;
+  font-size:10px;color:#c0392b;font-family:'Courier New',monospace;
+  letter-spacing:.5px;margin-top:10px;text-align:center;
+  display:none;
+}
+.login-footer{
+  margin-top:14px;font-size:9px;color:#7a8a9a;
+  text-align:center;letter-spacing:.5px;font-family:'Courier New',monospace;
+}
 </style>
 </head>
 <body>
+
+<!-- ══ LOGIN SCREEN ══ -->
+<div class="login-screen" id="login-screen">
+  <div class="login-logo-wrap">
+    <div style="font-size:28px;font-weight:900;color:#fff;letter-spacing:-1px;">G&amp;G</div>
+    <div class="login-title">Grupo Constructores S.A.S.</div>
+  </div>
+  <div class="login-card">
+    <div class="login-card-title">&#x1F512; Acceso Privado</div>
+    <div class="login-field">
+      <label>Usuario</label>
+      <input type="text" id="login-user" placeholder="inspector01" autocomplete="username"
+             onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()"/>
+    </div>
+    <div class="login-field">
+      <label>Contraseña</label>
+      <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter')intentarLogin()"/>
+    </div>
+    <button class="login-btn" onclick="intentarLogin()">Ingresar &#x2192;</button>
+    <div class="login-error" id="login-error">Usuario o contraseña incorrectos</div>
+    <div class="login-footer">Grupo G&amp;G Constructores S.A.S.<br>Acceso autorizado únicamente</div>
+  </div>
+</div>
+
 <div class="app">
 
 <div class="hdr">
@@ -673,10 +754,24 @@ ${cfg.obs?`<p style="margin-top:12pt;padding:8pt;background:#f8f8f0;border-left:
 </tr></table>
 <p style="margin-top:16pt;border-top:1pt solid #c0ccd8;padding-top:5pt;font-size:8pt;color:#9ab;">Grupo G&amp;G Constructores S.A.S. • gerencia@grupogygconstructores.com • 312 728 13 72 • ${cfg.ref}</p>
 </body></html>`;
-  const blob=new Blob(['\ufeff',w],{type:'application/msword'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-  a.download=`Informe_${cfg.ref.replace(/[^a-zA-Z0-9]/g,'-')}.doc`; a.click();
-  URL.revokeObjectURL(a.href); toast('📝 Word descargado');
+  try {
+    // data URI — funciona en Android APK igual que SheetJS
+    const b64 = btoa(unescape(encodeURIComponent('\ufeff' + w)));
+    const a = document.createElement('a');
+    a.href = 'data:application/msword;base64,' + b64;
+    a.download = `Informe_${cfg.ref.replace(/[^a-zA-Z0-9]/g,'-')}.doc`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    toast('📝 Word descargado');
+  } catch(e) {
+    // fallback Blob para PC
+    const blob = new Blob(['\ufeff', w], {type:'application/msword'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `Informe_${cfg.ref.replace(/[^a-zA-Z0-9]/g,'-')}.doc`;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(a.href);
+    toast('📝 Word descargado');
+  }
 }
 
 function exportExcel(){
@@ -714,6 +809,60 @@ function exportExcel(){
 }
 </script>
   
+<script>
+
+/* ══════════════════════════════════════
+   LOGIN — USUARIOS Y CONTRASEÑAS
+   Para cambiar: edite el objeto USUARIOS
+   Formato: 'usuario': 'contraseña'
+══════════════════════════════════════ */
+const USUARIOS = {
+  'gerencia':   'gg2026admin',
+  'inspector1': 'campo2026',
+  'inspector2': 'campo2026',
+};
+const SESSION_KEY = 'gg_session_v1';
+
+function verificarSesion() {
+  const s = sessionStorage.getItem(SESSION_KEY);
+  if (s) {
+    // Sesión activa — ocultar login
+    document.getElementById('login-screen').style.display = 'none';
+  }
+}
+
+function intentarLogin() {
+  const user = document.getElementById('login-user').value.trim().toLowerCase();
+  const pass = document.getElementById('login-pass').value;
+  const err  = document.getElementById('login-error');
+
+  if (USUARIOS[user] && USUARIOS[user] === pass) {
+    // Correcto — guardar sesión y ocultar login
+    sessionStorage.setItem(SESSION_KEY, user);
+    document.getElementById('login-screen').style.display = 'none';
+    err.style.display = 'none';
+    setStatus('Bienvenido, ' + user);
+    toast('✅ Bienvenido ' + user);
+  } else {
+    err.style.display = 'block';
+    document.getElementById('login-pass').value = '';
+    document.getElementById('login-pass').focus();
+    // Agitar el campo para feedback visual
+    const card = document.querySelector('.login-card');
+    card.style.animation = 'none';
+    card.style.transform = 'translateX(-8px)';
+    setTimeout(() => { card.style.transform = 'translateX(8px)'; }, 80);
+    setTimeout(() => { card.style.transform = 'translateX(0)';   }, 160);
+  }
+}
+
+// Verificar sesión al cargar
+document.addEventListener('DOMContentLoaded', () => {
+  verificarSesion();
+});
+
+</script>
+
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/gg-recibos/sw.js');
