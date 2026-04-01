@@ -794,11 +794,18 @@ function exportWord(){
         <span style="font-size:9pt;color:#7aacc8;">${r.timestamp}</span>
       </div>
       <div style="padding:7pt 10pt 5pt;font-size:11pt;line-height:1.5;">${r.description}</div>
-      ${(r.photos&&r.photos.length)?
-        `<div style="padding:0 10pt;display:grid;grid-template-columns:1fr 1fr;gap:6pt;">
-          ${r.photos.map(p=>`<img src="${p}" style="width:100%;max-height:110pt;object-fit:cover;border-radius:3pt;border:1pt solid #c0ccd8;"/>`).join('')}
-        </div>`
-        :(r.photo?`<div style="padding:0 10pt;text-align:center;"><img src="${r.photo}" style="max-width:100%;max-height:140pt;display:block;margin:0 auto;border-radius:3pt;border:1pt solid #c0ccd8;"/></div>`:'<div style="margin:4pt 10pt;height:36pt;background:#f8f9fa;border:1pt dashed #c0ccd8;text-align:center;line-height:36pt;font-size:9pt;color:#9aaab8;">[ Sin fotografía ]</div>')}
+      ${(r.photos&&r.photos.length)?`
+        <table width="100%" cellpadding="0" cellspacing="0" style="padding:0 10pt 5pt;border-collapse:collapse;">
+          <tr>
+            ${r.photos.map(p=>{
+              const colW = r.photos.length===1?440:r.photos.length===2?217:142;
+              return `<td width="${colW}" style="padding:0 3pt;vertical-align:top;">
+                <img src="${p}" width="${colW}" style="width:${colW}pt;height:auto;display:block;border:1pt solid #c0ccd8;"/>
+              </td>`;
+            }).join('')}
+          </tr>
+        </table>`
+        :'<div style="margin:4pt 10pt;height:36pt;background:#f8f9fa;border:1pt dashed #c0ccd8;text-align:center;line-height:36pt;font-size:9pt;color:#9aaab8;">[ Sin fotografía ]</div>'}
       <div style="background:#f0f4f8;padding:5pt 10pt;font-size:10pt;border-top:1pt solid #d0dce8;margin-top:5pt;">
         <span style="font-weight:bold;color:#1a3050;font-size:8pt;letter-spacing:1pt;text-transform:uppercase;">UBICACIÓN: </span>
         <span style="font-weight:bold;color:#1a5080;font-family:Courier New,monospace;font-size:11pt;">${r.alphaLoc}</span>
