@@ -353,8 +353,8 @@ function guardar(){
    Máx 1200px ancho, calidad 70%
 ══════════════════════════════════════ */
 function comprimirFoto(dataUrl, callback){
-  const MAX_PX  = 1200;
-  const QUALITY = 0.70;
+  const MAX_PX  = 900;
+  const QUALITY = 0.75;
   const img = new Image();
   img.onload = () => {
     let w = img.width, h = img.height;
@@ -796,9 +796,9 @@ function exportWord(){
       <div style="padding:7pt 10pt 5pt;font-size:11pt;line-height:1.5;">${r.description}</div>
       ${(r.photos&&r.photos.length)?
         `<div style="padding:0 10pt;display:grid;grid-template-columns:1fr 1fr;gap:6pt;">
-          ${r.photos.map(p=>`<img src="${p}" style="width:100%;max-height:140pt;object-fit:cover;border-radius:3pt;border:1pt solid #c0ccd8;"/>`).join('')}
+          ${r.photos.map(p=>`<img src="${p}" style="width:100%;max-height:110pt;object-fit:cover;border-radius:3pt;border:1pt solid #c0ccd8;"/>`).join('')}
         </div>`
-        :(r.photo?`<div style="padding:0 10pt;text-align:center;"><img src="${r.photo}" style="max-width:100%;max-height:180pt;display:block;margin:0 auto;border-radius:3pt;border:1pt solid #c0ccd8;"/></div>`:'<div style="margin:4pt 10pt;height:36pt;background:#f8f9fa;border:1pt dashed #c0ccd8;text-align:center;line-height:36pt;font-size:9pt;color:#9aaab8;">[ Sin fotografía ]</div>')}
+        :(r.photo?`<div style="padding:0 10pt;text-align:center;"><img src="${r.photo}" style="max-width:100%;max-height:140pt;display:block;margin:0 auto;border-radius:3pt;border:1pt solid #c0ccd8;"/></div>`:'<div style="margin:4pt 10pt;height:36pt;background:#f8f9fa;border:1pt dashed #c0ccd8;text-align:center;line-height:36pt;font-size:9pt;color:#9aaab8;">[ Sin fotografía ]</div>')}
       <div style="background:#f0f4f8;padding:5pt 10pt;font-size:10pt;border-top:1pt solid #d0dce8;margin-top:5pt;">
         <span style="font-weight:bold;color:#1a3050;font-size:8pt;letter-spacing:1pt;text-transform:uppercase;">UBICACIÓN: </span>
         <span style="font-weight:bold;color:#1a5080;font-family:Courier New,monospace;font-size:11pt;">${r.alphaLoc}</span>
@@ -814,7 +814,7 @@ body{font-family:Arial,sans-serif;font-size:11pt;margin:0;padding:0;}
 
 <!-- MEMBRETE: logo centrado + línea -->
 <div style="text-align:center;padding:28pt 40pt 16pt;border-bottom:3pt solid #8a9ab0;background:#fff;">
-  <img src="${LOGO_SRC}" style="width:160pt;height:auto;display:block;margin:0 auto 5pt;"/>
+  <img src="${LOGO_SRC}" style="width:120pt;height:auto;display:block;margin:0 auto 5pt;"/>
   <div style="font-size:7pt;letter-spacing:3pt;text-transform:uppercase;color:#9aaab8;">Grupo G&amp;G Constructores S.A.S.</div>
 </div>
 
